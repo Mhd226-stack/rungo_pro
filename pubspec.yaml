@@ -1,0 +1,73 @@
+name: flutter_driver
+description: A new Flutter project.
+publish_to: "none"
+
+version: 1.1.1+13
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  google_fonts: ^8.0.2
+  http: ^1.6.0
+  firebase_auth: ^6.4.0
+  firebase_core: ^4.7.0
+  firebase_database: ^12.3.0
+  firebase_messaging: ^16.2.0
+  shared_preferences: ^2.0.12
+  image_picker: ^1.0.1
+  google_maps_flutter: ^2.1.12
+  geolocator: ^14.0.2
+  location: ^8.0.1
+  audioplayers: ^6.6.0
+  url_launcher: ^6.0.18
+  flutter_local_notifications: ^21.0.0
+  permission_handler: ^12.0.1
+  flutter_contacts: ^1.1.9+1
+  share_plus: ^12.0.2
+  connectivity_plus: ^7.1.1
+  flutterwave_standard: ^1.1.0
+  package_info_plus: ^9.0.1
+  vector_math: ^2.1.1
+  webview_flutter: ^4.4.2
+  path_provider: ^2.0.11
+  flutter_inappwebview: ^6.1.5
+  uuid: ^4.5.3
+  intl: ^0.20.2
+  pinput: ^6.0.2
+  device_info_plus: ^12.4.0
+  flutter_native_splash: ^2.4.4
+  agora_rtc_engine: ^6.3.0
+  agora_token_service: ^0.1.2
+  flutter_easyloading: ^3.0.5
+  flutter_ringtone_player: ^4.0.0+4
+  lottie: ^3.3.3
+  firebase_app_check: 0.4.3
+  switcher_button: ^0.0.4
+  flutter_advanced_switch: ^3.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/clust_driver_icon.png"
+  min_sdk_android: 21
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/images/menu_item/
+    - assets/audio/
+    - assets/map_style.json
+    - assets/dark.json
