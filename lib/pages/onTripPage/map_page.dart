@@ -2752,13 +2752,25 @@ class _MapsState extends State<Maps>
                                                                             SizedBox(
                                                                               width: 10,
                                                                             ),
-                                                                            Column(
+                                                                            Flexible(child: Column(
                                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                                               children: [
                                                                                 MyText(
                                                                                   text: driverReq['userDetail']['data']['name'],
                                                                                   size: media.width * sixteen,
                                                                                   fontweight: FontWeight.w600,
+                                                                                ),
+                                                                                SizedBox(height: 3),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Icon(Icons.phone, size: 12, color: Color(0xff929292)),
+                                                                                    SizedBox(width: 4),
+                                                                                    MyText(
+                                                                                      text: driverReq['userDetail']['data']['mobile'].toString(),
+                                                                                      size: media.width * twelve,
+                                                                                      color: Color(0xff929292),
+                                                                                    ),
+                                                                                  ],
                                                                                 ),
                                                                                 SizedBox(
                                                                                   height: 5,
@@ -2778,14 +2790,15 @@ class _MapsState extends State<Maps>
                                                                                       size: media.width * twelve,
                                                                                     ),
                                                                                     SizedBox(
-                                                                                      width: media.width * 0.12,
+                                                                                      width: media.width * 0.04,
                                                                                     ),
                                                                                     (driverReq['drop_address'] == null && driverReq['is_rental'] == false)
                                                                                         ? Container()
-                                                                                        : Row(
+                                                                                        : Flexible(child: Row(
                                                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                                                       children: [
                                                                                         Row(
+                                                                                          mainAxisSize: MainAxisSize.min,
                                                                                           children: [
                                                                                             //payment image
                                                                                             (driverReq['payment_opt'].toString() == '1')
@@ -2814,16 +2827,18 @@ class _MapsState extends State<Maps>
                                                                                               width: 5,
                                                                                             ),
 
-                                                                                            MyText(
+                                                                                            Flexible(child: MyText(
                                                                                               text: driverReq['payment_type_string'].toString(),
                                                                                               size: media.width * sixteen,
-                                                                                            ),
+                                                                                              overflow: TextOverflow.ellipsis,
+                                                                                            )),
                                                                                             SizedBox(
                                                                                               width: 5,
                                                                                             ),
 
                                                                                             (driverReq['show_request_eta_amount'] == true && driverReq['request_eta_amount'] != null)
                                                                                                 ? Row(
+                                                                                              mainAxisSize: MainAxisSize.min,
                                                                                               children: [
                                                                                                 MyText(
                                                                                                   text: driverReq['request_eta_amount'].toStringAsFixed(0),
@@ -2843,11 +2858,11 @@ class _MapsState extends State<Maps>
                                                                                           ],
                                                                                         )
                                                                                       ],
-                                                                                    ),
+                                                                                    )),
                                                                                   ],
                                                                                 ),
                                                                               ],
-                                                                            ),
+                                                                            )),
                                                                           ],
                                                                         ),
                                                                         SizedBox(
@@ -3429,6 +3444,18 @@ class _MapsState extends State<Maps>
                                                                             size: media.width * sixteen,
                                                                             fontweight: FontWeight.w600,
                                                                           ),
+                                                                          SizedBox(height: 3),
+                                                                          Row(
+                                                                            children: [
+                                                                              Icon(Icons.phone, size: 12, color: Color(0xff929292)),
+                                                                              SizedBox(width: 4),
+                                                                              MyText(
+                                                                                text: driverReq['userDetail']['data']['mobile'].toString(),
+                                                                                size: media.width * twelve,
+                                                                                color: Color(0xff929292),
+                                                                              ),
+                                                                            ],
+                                                                          ),
                                                                           SizedBox(
                                                                             height: 5,
                                                                           ),
@@ -3532,11 +3559,27 @@ class _MapsState extends State<Maps>
                                                                         children: [
                                                                           SizedBox(
                                                                             width: media.width * 0.3,
-                                                                            child: MyText(
-                                                                              text: driverReq['userDetail']['data']['name'],
-                                                                              size: media.width * eighteen,
-                                                                              color: textColor,
-                                                                              maxLines: 1,
+                                                                            child: Column(
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                MyText(
+                                                                                  text: driverReq['userDetail']['data']['name'],
+                                                                                  size: media.width * eighteen,
+                                                                                  color: textColor,
+                                                                                  maxLines: 1,
+                                                                                ),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Icon(Icons.phone, size: 12, color: Color(0xff929292)),
+                                                                                    SizedBox(width: 4),
+                                                                                    MyText(
+                                                                                      text: driverReq['userDetail']['data']['mobile'].toString(),
+                                                                                      size: media.width * twelve,
+                                                                                      color: Color(0xff929292),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
                                                                             ),
                                                                           ),
                                                                           SizedBox(
@@ -3573,20 +3616,37 @@ class _MapsState extends State<Maps>
                                                                         ],
                                                                       )
                                                                           : SizedBox(
-                                                                        width: media.width * 0.3,
+                                                                        width: media.width * 0.5,
                                                                         child: Column(
                                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                                           children: [
                                                                             Row(
                                                                               children: [
-                                                                                SizedBox(
-                                                                                  child: MyText(
-                                                                                    text: getFirstName(driverReq['userDetail']['data']['name']),
-                                                                                    size: media.width * sixteen,
-                                                                                    color: textColor,
-                                                                                    fontweight: FontWeight.w500,
-                                                                                    maxLines: 1,
+                                                                                Flexible(
+                                                                                  child: Column(
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    children: [
+                                                                                      MyText(
+                                                                                        text: getFirstName(driverReq['userDetail']['data']['name']),
+                                                                                        size: media.width * sixteen,
+                                                                                        color: textColor,
+                                                                                        fontweight: FontWeight.w500,
+                                                                                        maxLines: 1,
+                                                                                      ),
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          Icon(Icons.phone, size: 12, color: Color(0xff929292)),
+                                                                                          SizedBox(width: 4),
+                                                                                          Flexible(child: MyText(
+                                                                                            text: driverReq['userDetail']['data']['mobile'].toString(),
+                                                                                            size: media.width * twelve,
+                                                                                            color: Color(0xff929292),
+                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                          )),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
                                                                                   ),
                                                                                 ),
                                                                                 SizedBox(
@@ -6233,12 +6293,13 @@ class _MapsState extends State<Maps>
                                                               MainAxisAlignment
                                                                   .spaceBetween,
                                                               children: [
-                                                                Column(
-                                                                  crossAxisAlignment:
-                                                                  CrossAxisAlignment.start,
-                                                                  children: [
-                                                                    Text(
-                                                                      languages[choosenLanguage]['text_notifyadmin'],
+                                                              Flexible(
+                                                              child: Column(
+                                                              crossAxisAlignment:
+                                                              CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text(
+                                                                  languages[choosenLanguage]['text_notifyadmin'],
                                                                       style: GoogleFonts.inter(fontSize: media.width * seventeen, color: textColor, fontWeight: FontWeight.w500),
                                                                     ),
                                                                     (notifyCompleted == true)
@@ -6253,8 +6314,8 @@ class _MapsState extends State<Maps>
                                                                       ),
                                                                     )
                                                                         : Container()
-                                                                  ],
-                                                                ),
+                                                              ],
+                                                              )),
                                                                 Icon(
                                                                     Icons
                                                                         .notifications_none,

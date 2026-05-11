@@ -1129,7 +1129,7 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                                                               ['data'][
                                                           'requested_currency_symbol'] +
                                                       ' ' +
-                                                      '${int.parse(myHistory[selectedHistory]['request_eta_amount'].toString())}',
+                                                      '${double.parse(myHistory[selectedHistory]['request_eta_amount'].toString()).toStringAsFixed(0)}',
                                               size: media.width * twelve,
                                               //  - int.parse(myHistory[selectedHistory]['requestBill']['data']['admin_commision'].toString())
                                             ),
@@ -1298,9 +1298,9 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                                                             .spaceBetween,
                                                     children: [
                                                       MyText(
-                                                        text: generalComplaintList[
-                                                                complaintType]
-                                                            ['title'],
+                                                        text: (generalComplaintList.isNotEmpty && complaintType < generalComplaintList.length)
+                                                            ? generalComplaintList[complaintType]['title']
+                                                            : '',
                                                         size: media.width *
                                                             fourteen,
                                                       ),
@@ -1377,9 +1377,12 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                                                                             decoration:
                                                                                 BoxDecoration(border: Border(bottom: BorderSide(width: 1.1, color: (i == generalComplaintList.length - 1) ? Colors.transparent : borderLines))),
                                                                             child:
-                                                                                MyText(
-                                                                              text: generalComplaintList[i]['title'],
-                                                                              size: media.width * fourteen,
+                                                                            MyText(
+                                                                              text: (generalComplaintList.isNotEmpty && complaintType < generalComplaintList.length)
+                                                                                  ? generalComplaintList[complaintType]['title']
+                                                                                  : '',
+                                                                              size: media.width *
+                                                                                  fourteen,
                                                                             ),
                                                                           ),
                                                                         ));

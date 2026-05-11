@@ -3929,7 +3929,8 @@ getGeneralComplaint(type) async {
       headers: {'Authorization': 'Bearer ${bearerToken[0].token}'},
     );
     if (response.statusCode == 200) {
-      generalComplaintList = jsonDecode(response.body)['data'];
+      debugPrint('complaint response: ${response.body}');
+      generalComplaintList = jsonDecode(response.body)['data'] ?? [];
       result = 'success';
     } else if (response.statusCode == 401) {
       result = 'logout';
@@ -3938,6 +3939,7 @@ getGeneralComplaint(type) async {
       result = 'failed';
     }
   } catch (e) {
+    debugPrint('getGeneralComplaint error: $e');
     if (e is SocketException) {
       internet = false;
       result = 'no internet';
