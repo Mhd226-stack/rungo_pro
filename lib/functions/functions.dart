@@ -460,6 +460,7 @@ getLocalData() async {
             bearerToken.add(BearerClass(type: 'Bearer', token: tokens));
 
             var responce = await getUserDetails();
+            await getSubscriptionStatus();
             if (responce == true) {
               if (userDetails['role'] != 'owner') {
                 platforms.invokeMethod('login');
@@ -654,6 +655,7 @@ registerDriver() async {
           token: jsonVal['access_token'].toString()));
       pref.setString('Bearer', bearerToken[0].token);
       await getUserDetails();
+      await getSubscriptionStatus();
       if (platform == TargetPlatform.android && package != null) {
         await FirebaseDatabase.instance
             .ref()
@@ -4994,4 +4996,35 @@ checkFcmTokenChange() {
       }
     });
   });
+}
+
+// Abonnement conducteur
+Map<String, dynamic> driverSubscription = {};
+
+getSubscriptionStatus() async {
+  dynamic result;
+  try {
+    var response = await http.get(
+      Uri.parse('${url}api/v1/driver/subscription/status'),
+      headers: {
+        'Authorization': 'Bearer ${bearerToken[0].token}',
+        'Content-Type': 'application/json'
+      },
+    );
+    if (response.statusCode == 200) {
+      driverSubscription = jsonDecode(response.body)['data'];
+      result = 'success';
+    } else if (response.statusCode == 401) {
+      result = 'logout';
+    } else {
+      debugPrint(response.body);
+      result = 'failure';
+    }
+  } catch (e) {
+    if (e is SocketException) {
+      result = 'no internet';
+      internet = false;
+    }
+  }
+  return result;
 }

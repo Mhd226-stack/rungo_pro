@@ -208,9 +208,9 @@ class _MapsState extends State<Maps>
         ));
       }
     });
+    getSubscriptionStatus();
     super.initState();
   }
-
   void _onMapCreated(GoogleMapController controller) {
     setState(() {
       _controller = controller;
@@ -1424,11 +1424,42 @@ class _MapsState extends State<Maps>
                                 height: media.height * 1,
                                 width: media.width * 1,
                                 child: Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment:
                                     (state == '1' || state == '2')
                                         ? MainAxisAlignment.center
                                         : MainAxisAlignment.start,
                                     children: [
+                                      // Bannière abonnement - TODO: à activer
+                                      // if (driverSubscription.isNotEmpty)
+                                      //   Container(
+                                      //     width: media.width * 1,
+                                      //     padding: EdgeInsets.symmetric(
+                                      //         horizontal: media.width * 0.04,
+                                      //         vertical: media.width * 0.02),
+                                      //     color: (driverSubscription['active'] == true)
+                                      //         ? ((driverSubscription['days_remaining'] <= 3)
+                                      //         ? Colors.orange
+                                      //         : Colors.green)
+                                      //         : Colors.red,
+                                      //     child: Row(
+                                      //       children: [
+                                      //         Icon(Icons.card_membership, color: Colors.white, size: 16),
+                                      //         SizedBox(width: 8),
+                                      //         Expanded(
+                                      //           child: Text(
+                                      //             driverSubscription['message'] ?? '',
+                                      //             style: TextStyle(color: Colors.white, fontSize: 12),
+                                      //           ),
+                                      //         ),
+                                      //         if (driverSubscription['active'] == true)
+                                      //           Text(
+                                      //             'Exp: ${driverSubscription['expired_at']?.toString().substring(0, 10) ?? ''}',
+                                      //             style: TextStyle(color: Colors.white, fontSize: 11),
+                                      //           ),
+                                      //       ],
+                                      //     ),
+                                      //   ),
                                       (state == '1')
                                           ? Container(
                                         padding: EdgeInsets.all(
