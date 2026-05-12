@@ -325,16 +325,18 @@ class _EditProfileState extends State<EditProfile> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            children: [
-                                              MyText(
-                                                text: languages[choosenLanguage]
-                                                    ['text_car_info'],
-                                                size: media.width * eighteen,
-                                                fontweight: FontWeight.w500,
-                                              )
-                                            ],
-                                          ),
+                                          Flexible(
+                                            child: Row(
+                                              children: [
+                                                Flexible(child: MyText(
+                                                  text: languages[choosenLanguage]
+                                                  ['text_car_info'],
+                                                  size: media.width * eighteen,
+                                                  fontweight: FontWeight.w500,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ))
+                                              ],
+                                            )),
                                           (userDetails['owner_id'] == null)
                                               ? InkWell(
                                                   onTap: () async {

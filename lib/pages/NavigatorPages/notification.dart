@@ -301,9 +301,10 @@ class _NotificationPageState extends State<NotificationPage> {
                                                                       0.02,
                                                             ),
                                                             if (notificationHistory[
-                                                                        i]
-                                                                    ['image'] !=
-                                                                null)
+                                                            i]
+                                                            ['image'] !=
+                                                                null &&
+                                                                !notificationHistory[i]['image'].toString().endsWith('/'))
                                                               Builder(builder:
                                                                   (context) {
                                                                 print(notificationHistory[

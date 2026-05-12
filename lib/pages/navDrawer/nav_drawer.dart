@@ -163,7 +163,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                                                 builder:
                                                                     (context) =>
                                                                         const EditProfile()));
-                                                        if (val) {
+                                                        if (val == true) {
                                                           setState(() {});
                                                         }
                                                       },
