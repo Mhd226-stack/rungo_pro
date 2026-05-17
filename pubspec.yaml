@@ -30,7 +30,6 @@ dependencies:
   flutter_contacts: ^1.1.9+1
   share_plus: ^12.0.2
   connectivity_plus: ^7.1.1
-  flutterwave_standard: ^1.1.0
   package_info_plus: ^9.0.1
   vector_math: ^2.1.1
   webview_flutter: ^4.4.2
@@ -59,8 +58,15 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/clust_driver_icon.png"
+  image_path: "assets/images/iconl.png"
   min_sdk_android: 21
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/images/iconl.png"
+
+flutter_native_splash:
+  color: "#FFC244"
+  android_12:
+    color: "#FFC244"
 
 flutter:
   uses-material-design: true
@@ -71,3 +77,4 @@ flutter:
     - assets/audio/
     - assets/map_style.json
     - assets/dark.json
+    - assets/connect.json

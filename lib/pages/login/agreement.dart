@@ -111,7 +111,7 @@ class _AggreementPageState extends State<AggreementPage> {
                                       ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    openBrowser('https://clust.al/terms');
+                                    openBrowser('https://rungobf.com/terms');
                                   }),
                             TextSpan(
                                 text: languages[choosenLanguage]
@@ -130,7 +130,7 @@ class _AggreementPageState extends State<AggreementPage> {
                                       ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    openBrowser('https://clust.al/en/privacy/');
+                                    openBrowser('https://rungobf.com/fr/privacy/');
                                   }),
                           ],
                         ),

@@ -74,7 +74,7 @@ class _AboutState extends State<About> {
                         //terms and conditions
                         InkWell(
                           onTap: () {
-                            openBrowser('https://clust.al/en/terms/');
+                            openBrowser('https://rungobf.com/fr/terms/');
                           },
                           child: Text(
                             languages[choosenLanguage]
@@ -91,7 +91,7 @@ class _AboutState extends State<About> {
                         //privacy policy
                         InkWell(
                           onTap: () {
-                            openBrowser('https://clust.al/en/privacy/');
+                            openBrowser('https://rungobf.com/bf/privacy/');
                           },
                           child: Text(
                             languages[choosenLanguage]['text_privacy'],
@@ -107,7 +107,7 @@ class _AboutState extends State<About> {
                         //website
                         InkWell(
                           onTap: () {
-                            openBrowser('https://clust.al/');
+                            openBrowser('https://rungobf.com/');
                           },
                           child: Text(
                             languages[choosenLanguage]['text_about'],

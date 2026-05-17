@@ -221,7 +221,7 @@ class _SignInwithEmailState extends State<SignInwithEmail> {
                   children: [
                     InkWell(
                       onTap: () {
-                        openBrowser('https://clust.al/en/terms/');
+                        openBrowser('https://rungobf.com/fr/terms/');
                       },
                       child: Text(
                         languages[choosenLanguage]['text_terms'],

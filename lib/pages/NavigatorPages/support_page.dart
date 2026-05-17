@@ -234,7 +234,7 @@ class _SupportState extends State<Support> {
                             children: [
                               NavMenu(
                                 onTap: () {
-                                  openBrowser('https://clust.al/en/privacy/');
+                                  openBrowser('https://rungobf.com/fr/privacy/');
                                 },
                                 text: languages[choosenLanguage]
                                     ['text_privacy'],

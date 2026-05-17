@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterwave_standard/flutterwave.dart';
+// import 'package:flutterwave_standard/flutterwave.dart'; // désactivé - package retiré
 import '../../functions/functions.dart';
 import '../../styles/styles.dart';
 import '../../translation/translation.dart';
@@ -24,7 +24,7 @@ class _FlutterWavePageState extends State<FlutterWavePage> {
 
   @override
   void initState() {
-    payMoney();
+    // payMoney(); // désactivé - flutterwave_standard retiré
     super.initState();
   }
 
@@ -37,35 +37,29 @@ class _FlutterWavePageState extends State<FlutterWavePage> {
         context, MaterialPageRoute(builder: (context) => const LandingPage()));
   }
 
-  payMoney() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final Customer customer = Customer(
-        name: userDetails['name'],
-        phoneNumber: userDetails['mobile'],
-        email: userDetails['email']);
-
-    flutterwave = Flutterwave(
-        publicKey: (walletBalance['flutterwave_environment'] == 'test')
-            ? walletBalance['flutter_wave_test_secret_key']
-            : walletBalance['flutter_wave_live_secret_key'],
-        currency: walletBalance['currency_code'],
-        txRef: '${userDetails['id']}_${DateTime.now()}',
-        amount: addMoney.toString(),
-        customer: customer,
-        paymentOptions: "ussd, card, barter, payattitude, account",
-        customization: Customization(title: "Payment"),
-        redirectUrl: 'https://rungo.app',
-        isTestMode: (walletBalance['flutterwave_environment'] == 'test')
-            ? true
-            : false);
-
-    setState(() {
-      _isLoading = false;
-    });
-  }
+  // payMoney() désactivé - flutterwave_standard retiré du projet
+  // payMoney() async {
+  //   setState(() { _isLoading = true; });
+  //   final Customer customer = Customer(
+  //       name: userDetails['name'],
+  //       phoneNumber: userDetails['mobile'],
+  //       email: userDetails['email']);
+  //   flutterwave = Flutterwave(
+  //       publicKey: (walletBalance['flutterwave_environment'] == 'test')
+  //           ? walletBalance['flutter_wave_test_secret_key']
+  //           : walletBalance['flutter_wave_live_secret_key'],
+  //       currency: walletBalance['currency_code'],
+  //       txRef: '${userDetails['id']}_${DateTime.now()}',
+  //       amount: addMoney.toString(),
+  //       customer: customer,
+  //       paymentOptions: "ussd, card, barter, payattitude, account",
+  //       customization: Customization(title: "Payment"),
+  //       redirectUrl: 'https://rungo.app',
+  //       isTestMode: (walletBalance['flutterwave_environment'] == 'test')
+  //           ? true
+  //           : false);
+  //   setState(() { _isLoading = false; });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -127,33 +121,10 @@ class _FlutterWavePageState extends State<FlutterWavePage> {
                           SizedBox(height: media.width * 0.05),
                           Button(
                               onTap: () async {
-                                final ChargeResponse response =
-                                await flutterwave.charge(context);
-                                // ignore: unnecessary_null_comparison
-                                if (response != null) {
-                                  if (response.status == 'success') {
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
-                                    var val = await addMoneyFlutterwave(
-                                        addMoney, response.transactionId);
-                                    if (val == 'success') {
-                                      setState(() {
-                                        _success = true;
-                                        _isLoading = false;
-                                      });
-                                    } else if (val == 'logout') {
-                                      navigateLogout();
-                                    }
-                                  } else {
-                                    setState(() {
-                                      _failed = true;
-                                      _isLoading = false;
-                                    });
-                                  }
-                                } else {
-                                  pop();
-                                }
+                                // Flutterwave désactivé - à remplacer par autre passerelle
+                                setState(() {
+                                  _failed = true;
+                                });
                               },
                               text: 'Pay')
                         ],

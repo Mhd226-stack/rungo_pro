@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/pages/onTripPage/map_page.dart';
+import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../styles/styles.dart';
@@ -36,13 +37,18 @@ const isNameScreen = "isNameScreen";
 const isAgrementScreen = "isPolicyScreen";
 const isDriver = 'isDriver';
 
-class _LoadingPageState extends State<LoadingPage> {
+class _LoadingPageState extends State<LoadingPage> with TickerProviderStateMixin {
   String dot = '.';
   bool updateAvailable = false;
   dynamic _package;
   dynamic _version;
   bool _error = false;
   bool _isLoading = false;
+
+  late AnimationController _lottieController;
+  late AnimationController _splashController;
+  late Animation<double> _scaleAnim;
+  late Animation<double> _fadeAnim;
 
   var demopage = TextEditingController();
 
@@ -64,9 +70,35 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   void initState() {
+    super.initState();
+    _lottieController = AnimationController(vsync: this);
+
+    _splashController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    );
+    _scaleAnim = Tween<double>(begin: 0.3, end: 1.0).animate(
+      CurvedAnimation(parent: _splashController, curve: Curves.easeOutBack),
+    );
+    _fadeAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _splashController,
+        curve: const Interval(0.0, 0.7, curve: Curves.easeIn),
+      ),
+    );
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) _splashController.forward();
+    });
+
     getLanguageDone();
     getOwnermodule();
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _lottieController.dispose();
+    _splashController.dispose(); // ✅ ajouté
+    super.dispose();
   }
 
   getData() async {
@@ -223,23 +255,65 @@ class _LoadingPageState extends State<LoadingPage> {
               height: media.height * 1,
               width: media.width * 1,
               decoration: BoxDecoration(
-                color: Colors.white,
-                // image: DecorationImage(
-                //     fit: BoxFit.cover,
-                //     image: AssetImage('assets/images/splash_screen_bg.png')),
+                color: const Color(0xFFFFC244),
               ),
-              child: Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      width: media.width * 0.3,
-                      height: media.height * 0.3,
-                      // animate: false,
-                      // repeat: false
+                  Lottie.asset(
+                    'assets/connect.json',
+                    controller: _lottieController,
+                    width: media.width * 0.7,
+                    height: media.height * 0.45,
+                    fit: BoxFit.contain,
+                    onLoaded: (composition) {
+                      _lottieController
+                        ..duration = composition.duration
+                        ..repeat();
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  FadeTransition(
+                    opacity: _fadeAnim,
+                    child: ScaleTransition(
+                      scale: _scaleAnim,
+                      child: RichText(
+                        text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'RUN',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 6,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'GO',
+                              style: TextStyle(
+                                color: Color(0xFF4CAF50),
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 6,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '  PRO',
+                              style: TextStyle(
+                                color: Colors.deepOrange,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: 4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
+
                 ],
               ),
             ),

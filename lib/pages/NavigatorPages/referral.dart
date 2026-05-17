@@ -28,7 +28,7 @@ class _ReferralPageState extends State<ReferralPage> {
   // var androidUrl =
   // 'https://play.google.com/store/apps/details?id=com.clust.driver&pcampaignid=web_share';
   // ignore: prefer_typing_uninitialized_variables
-  var redirectUrl = 'https://driver.clust.al/';
+  var redirectUrl = 'https://rungobf.com.fr/';
 
   @override
   void initState() {
