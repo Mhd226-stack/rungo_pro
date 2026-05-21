@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
@@ -56,7 +56,7 @@ String url = 'http://192.168.11.107:8081/';
 // String url = 'https://dev.rungo.bf/';
 //add '/' at the end of the url as 'https://url.com/'
 
-String mapkey = 'AIzaSyBWlSP098N9_jnbpaQ9aKJHApMxfG7q3no';
+String mapkey = 'REMOVED_KEY';
 String mapStyle = '';
 
 getDetailsOfDevice() async {
