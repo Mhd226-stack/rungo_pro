@@ -52,11 +52,11 @@ Set<Polyline> sourceToDestPolylines = {};
 String ischeckownerordriver = '';
 
 //base url
-String url = 'http://192.168.11.107:8081/';
-// String url = 'https://dev.rungo.bf/';
+// String url = 'http://192.168.11.105:8081/';
+String url = 'https://rungobf.com/';
 //add '/' at the end of the url as 'https://url.com/'
 
-String mapkey = 'REMOVED_KEY';
+String mapkey = 'AIzaSyBWlSP098N9_jnbpaQ9aKJHApMxfG7q3no';
 String mapStyle = '';
 
 getDetailsOfDevice() async {
@@ -83,7 +83,7 @@ validateEmail(email) async {
   dynamic result;
   try {
     var response = await http
-        .post(Uri.parse('${url}api/v1/driver/validate-mobile'), body: {
+        .post(Uri.parse('${url}api/v1/driver/validate-mobile-for-login'), body: {
       'email': email,
       "role": userDetails.isNotEmpty
           ? userDetails['role'].toString()
@@ -1232,17 +1232,25 @@ driverLogin() async {
   try {
     var token = await FirebaseMessaging.instance.getToken();
     var fcm = token.toString();
+    var requestBody = (value == 0)
+        ? {
+      "mobile": '${countries[phcode]['dial_code'].toString().substring(1)}$phnumber',
+      'device_token': fcm,
+      "login_by": (platform == TargetPlatform.android) ? 'android' : 'ios',
+      "role": ischeckownerordriver,
+    }
+        : {
+      "email": email,
+      'device_token': fcm,
+      "login_by": (platform == TargetPlatform.android) ? 'android' : 'ios',
+      "role": ischeckownerordriver,
+    };
+
     var response = await http.post(Uri.parse('${url}api/v1/driver/login'),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({
-          "mobile":
-          '${countries[phcode]['dial_code'].toString().substring(1)}$phnumber',
-          'device_token': fcm,
-          "login_by": (platform == TargetPlatform.android) ? 'android' : 'ios',
-          "role": ischeckownerordriver,
-        }));
+        body: jsonEncode(requestBody));
     if (response.statusCode == 200) {
       var jsonVal = jsonDecode(response.body);
       if (ischeckownerordriver == 'driver') {
@@ -2233,12 +2241,31 @@ etaRequest() async {
 geoCodingForLatLng(placeid) async {
   dynamic location;
   try {
+    // D'abord essayer avec Google Places
     var response = await http.get(Uri.parse(
         'https://maps.googleapis.com/maps/api/place/details/json?placeid=$placeid&key=$mapkey'));
 
     if (response.statusCode == 200) {
-      var val = jsonDecode(response.body)['result']['geometry']['location'];
-      location = LatLng(val['lat'], val['lng']);
+      var body = jsonDecode(response.body);
+      if (body['status'] == 'OK') {
+        var val = body['result']['geometry']['location'];
+        location = LatLng(val['lat'], val['lng']);
+      } else {
+        // Fallback : Nominatim via le place_id comme texte de recherche
+        var searchResponse = await http.get(
+          Uri.parse('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=$placeid'),
+          headers: {'User-Agent': 'RungoApp/1.0'},
+        );
+        if (searchResponse.statusCode == 200) {
+          var results = jsonDecode(searchResponse.body);
+          if (results.isNotEmpty) {
+            location = LatLng(
+              double.parse(results[0]['lat']),
+              double.parse(results[0]['lon']),
+            );
+          }
+        }
+      }
     } else {
       debugPrint(response.body);
     }
@@ -2345,20 +2372,23 @@ getAutoAddress(input, sessionToken, lat, lng) async {
 geoCoding(double lat, double lng) async {
   dynamic result;
   try {
-    var response = await http.get(Uri.parse(
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=$mapkey'));
-
+    var response = await http.get(
+      Uri.parse('https://nominatim.openstreetmap.org/reverse?format=json&lat=$lat&lon=$lng'),
+      headers: {'User-Agent': 'RungoApp/1.0'},
+    );
     if (response.statusCode == 200) {
       var val = jsonDecode(response.body);
-      result = val['results'][0]['formatted_address'];
+      result = val['display_name'];
     } else {
       debugPrint(response.body);
-      result = '';
+      result = '$lat, $lng';
     }
   } catch (e) {
     if (e is SocketException) {
       internet = false;
       result = 'no internet';
+    } else {
+      result = '$lat, $lng';
     }
   }
   return result;
@@ -3590,6 +3620,16 @@ userLogout() async {
       requestStreamStart = null;
       requestStreamEnd = null;
       pref.remove('Bearer');
+      pref.remove('currentRegScreen');
+      pref.remove('phoneForPageRedirect');
+      pref.remove('countryForPageRedirect');
+      pref.remove('phcodeForRedirect');
+
+      pref.setString('currentRegScreen', 'isLoginScreen');
+
+      userDetails.clear();
+      bearerToken.clear();
+
       result = 'success';
     } else if (response.statusCode == 401) {
       result = 'logout';

@@ -51,7 +51,7 @@
             android:foregroundServiceType="location"
             android:exported="false" />
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="REMOVED_KEY"/>
+            android:value="AIzaSyBWlSP098N9_jnbpaQ9aKJHApMxfG7q3no"/>
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

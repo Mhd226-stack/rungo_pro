@@ -182,21 +182,30 @@ class _EditProfileState extends State<EditProfile> {
                             child: Stack(
                               children: [
                                 Container(
-                                  height: media.width * 0.3,
-                                  width: media.width * 0.3,
+                                  height: media.width * 0.2,
+                                  width: media.width * 0.2,
                                   decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: page,
-                                      image: (proImageFile == null)
-                                          ? DecorationImage(
-                                              image: NetworkImage(
-                                                userDetails['profile_picture'],
-                                              ),
-                                              fit: BoxFit.cover)
-                                          : DecorationImage(
-                                              image:
-                                                  FileImage(File(proImageFile)),
-                                              fit: BoxFit.cover)),
+                                    shape: BoxShape.circle,
+                                    color: buttonColor,
+                                  ),
+                                  child: ClipOval(
+                                    child: (userDetails['profile_picture'] != null &&
+                                        userDetails['profile_picture'].toString().isNotEmpty)
+                                        ? Image.network(
+                                      userDetails['profile_picture'],
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => Icon(
+                                        Icons.person,
+                                        size: media.width * 0.1,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                        : Icon(
+                                      Icons.person,
+                                      size: media.width * 0.1,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                                 Positioned(
                                     right: media.width * 0.04,

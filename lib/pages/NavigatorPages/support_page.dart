@@ -234,12 +234,11 @@ class _SupportState extends State<Support> {
                             children: [
                               NavMenu(
                                 onTap: () {
-                                  openBrowser('https://rungobf.com/fr/privacy/');
+                                  openBrowser('https://mhd226-stack.github.io/rungo-pro-privacy/');
                                 },
                                 text: languages[choosenLanguage]
                                     ['text_privacy'],
-                                image:
-                                    'assets/images/menu_item/privacy_policy.png',
+                                image: 'assets/images/menu_item/privacy_policy.png',
                                 showIcon: false,
                               ),
                               // Positioned(

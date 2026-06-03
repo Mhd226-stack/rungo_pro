@@ -608,8 +608,10 @@ class _NamePageState extends State<NamePage> {
                                         var result =
                                             await validateEmail(emailtext.text);
                                         if (result == 'success') {
-                                          isfromomobile = true;
+                                          isfromomobile = false;
                                           isverifyemail = true;
+                                          phoneAuthCheck = true;
+                                          await sendOTPtoEmail(email);
                                           currentPage = 3;
                                         } else {
                                           setState(() {

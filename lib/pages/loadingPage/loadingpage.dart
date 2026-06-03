@@ -170,13 +170,22 @@ class _LoadingPageState extends State<LoadingPage> with TickerProviderStateMixin
           //if user is login and check waiting for approval status and send accordingly
           if (val == '3') {
             navigate();
-          } else if (getCurrentRegScreen != '') {
-            if (ownermodule == '1') {
+          } else if (getCurrentRegScreen == 'isLoginScreen') {
+            Future.delayed(const Duration(seconds: 1), () {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const LandingPage()));
-            }
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const Login()));
+                  MaterialPageRoute(builder: (context) => const Login()));
+            });
+          } else if (getCurrentRegScreen != '') {
+            // En cours d'inscription → continuer l'inscription
+            Future.delayed(const Duration(seconds: 1), () {
+              if (ownermodule == '1') {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const LandingPage()));
+              } else {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const Login()));
+              }
+            });
           } else if (choosenLanguage == '') {
             // ignore: use_build_context_synchronously
             Navigator.pushReplacement(context,
@@ -293,7 +302,7 @@ class _LoadingPageState extends State<LoadingPage> with TickerProviderStateMixin
                             TextSpan(
                               text: 'GO',
                               style: TextStyle(
-                                color: Color(0xFF4CAF50),
+                                color: Colors.white,
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 6,

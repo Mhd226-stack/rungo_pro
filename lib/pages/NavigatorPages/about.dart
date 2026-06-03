@@ -91,7 +91,7 @@ class _AboutState extends State<About> {
                         //privacy policy
                         InkWell(
                           onTap: () {
-                            openBrowser('https://rungobf.com/bf/privacy/');
+                            openBrowser('https://mhd226-stack.github.io/rungo-pro-privacy/');
                           },
                           child: Text(
                             languages[choosenLanguage]['text_privacy'],

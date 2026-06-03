@@ -100,9 +100,8 @@ class _OtpState extends State<Otp> with TickerProviderStateMixin {
   otpFalse() async {
     if (phoneAuthCheck == false) {
       if (isverifyemail == false) {
-        _pinPutController2.text = '123456';
-        otpNumber = _pinPutController2.text;
-        normallogin();
+        // Ne rien faire — attendre que l'utilisateur entre le vrai OTP Firebase
+        // L'OTP sera vérifié quand l'utilisateur clique sur "Vérifier"
       } else {
         emaillogin();
       }
@@ -116,12 +115,12 @@ class _OtpState extends State<Otp> with TickerProviderStateMixin {
 
   emaillogin() async {
     var verify = await verifyUser(phnumber);
-    // var register = await registerUser();
     if (verify == false) {
-      _pinPutController2.text = '123456';
-      otpNumber = _pinPutController2.text;
-      //referral page
-      navigate(verify);
+      // Ne pas hardcoder l'OTP — attendre que l'utilisateur entre le vrai code
+      setState(() {
+        _pinPutController2.text = '';
+        otpNumber = '';
+      });
     } else {
       setState(() {
         _pinPutController2.text = '';
@@ -457,9 +456,11 @@ ${countries[phcode]['dial_code']} $phnumber''',
                               if (result == 'success') {
                                 isfromomobile = false;
                                 _error = '';
-                                var verify = await verifyUser(email);
+
                                 value = 1;
+                                var verify = await verifyUser(email);
                                 navigate(verify);
+
                               } else {
                                 setState(() {
                                   _pinPutController2.clear();

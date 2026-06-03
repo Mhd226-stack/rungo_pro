@@ -20,6 +20,7 @@ import '../NavigatorPages/support_page.dart';
 import '../NavigatorPages/walletpage.dart';
 import '../login/landingpage.dart';
 import '../onTripPage/map_page.dart';
+import '../login/login.dart';
 
 class NavDrawer extends StatefulWidget {
   const NavDrawer({Key? key}) : super(key: key);
@@ -969,19 +970,18 @@ class _NavDrawerState extends State<NavDrawer> {
                                           height: media.width * 0.08,
                                         ),
                                         Button(
-                                            width:
-                                                Responsive.width(60, context),
-                                            onTap: () {
-                                              setState(() {
-                                                logout = true;
-                                              });
-
-                                              valueNotifierHome
-                                                  .incrementNotifier();
-                                              Navigator.pop(context);
+                                            width: Responsive.width(60, context),
+                                            onTap: () async {
+                                              var result = await userLogout();
+                                              if (result == 'success') {
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => const Login()),
+                                                      (route) => false,
+                                                );
+                                              }
                                             },
-                                            text: languages[choosenLanguage]
-                                                ['text_sign_out']),
+                                            text: languages[choosenLanguage]['text_sign_out']),
                                         SizedBox(
                                           height: media.width * 0.2,
                                         )

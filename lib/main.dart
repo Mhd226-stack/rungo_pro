@@ -30,7 +30,7 @@ void main() async {
   currentPositionUpdate();
   await FirebaseAppCheck.instance.activate(
     webProvider:
-    ReCaptchaV3Provider('6LcSSukpAAAAABnvFl_JbZqVhBJEItoqEiRQd_So'),
+    ReCaptchaV3Provider('6LeWYAktAAAAAM0CD-3_vJ1UXhcNFcQxulsU1Lmr'),
     androidProvider: AndroidProvider.playIntegrity,
     appleProvider: AppleProvider.deviceCheck,
   );

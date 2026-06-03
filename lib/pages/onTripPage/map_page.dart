@@ -466,8 +466,15 @@ class _MapsState extends State<Maps>
         }
         if (mounted) {
           setState(() {
-            pinLocationIcon = BitmapDescriptor.fromBytes(markerIcon);
-            pinLocationIcon2 = BitmapDescriptor.fromBytes(markerIcon2);
+            // 1. Sécurité : Vérifier si les données brutes existent avant de convertir
+            if (markerIcon != null && markerIcon.isNotEmpty) {
+              pinLocationIcon = BitmapDescriptor.fromBytes(markerIcon);
+            }
+            if (markerIcon2 != null && markerIcon2.isNotEmpty) {
+              pinLocationIcon2 = BitmapDescriptor.fromBytes(markerIcon2);
+            }
+
+            pinLocationIcon3 ??= BitmapDescriptor.defaultMarker;
 
             if (myMarkers.isEmpty && userDetails['role'] != 'owner') {
               myMarkers = [
@@ -476,9 +483,9 @@ class _MapsState extends State<Maps>
                     rotation: heading,
                     position: center,
                     icon: (userDetails['vehicle_type_icon_for'] == 'motor_bike')
-                        ? pinLocationIcon2
+                        ? (pinLocationIcon2 ?? BitmapDescriptor.defaultMarker)
                         : (userDetails['vehicle_type_icon_for'] == 'taxi')
-                        ? pinLocationIcon
+                        ? (pinLocationIcon ?? BitmapDescriptor.defaultMarker)
                         : pinLocationIcon3,
                     anchor: const Offset(0.5, 0.5))
               ];
@@ -661,7 +668,7 @@ class _MapsState extends State<Maps>
                             userDetails['vehicle_type_icon_for'] ==
                                 'taxi')
                             ? pinLocationIcon
-                            : pinLocationIcon3,
+                            : pinLocationIcon,
                         '',
                         '');
                   }
@@ -2974,26 +2981,23 @@ class _MapsState extends State<Maps>
                                                                                   setState(() {
                                                                                     _isLoading = true;
                                                                                   });
-                                                                                  //reject request
                                                                                   await requestReject();
                                                                                   setState(() {
                                                                                     _isLoading = false;
                                                                                   });
-                                                                                  await Future.delayed(Duration(milliseconds: 500));
-                                                                                  navigate(context);
+                                                                                  await Future.delayed(const Duration(milliseconds: 500));
+                                                                                  if (mounted) navigate(context);
                                                                                 },
                                                                                 text: languages[choosenLanguage]['text_decline']),
                                                                             Button(
                                                                               onTap: () async {
+                                                                                if (duration == 0) return;
                                                                                 setState(() {
                                                                                   _isLoading = true;
                                                                                 });
-                                                                                await Future.delayed(Duration(seconds: 2));
-                                                                                if (duration != 0) {
-                                                                                  await requestAccept();
-                                                                                  setState(() {
-                                                                                    _isLoading = false;
-                                                                                  });
+                                                                                var val = await requestAccept();
+                                                                                if (val == 'logout') {
+                                                                                  navigateLogout();
                                                                                 }
                                                                                 setState(() {
                                                                                   _isLoading = false;
@@ -4243,28 +4247,44 @@ class _MapsState extends State<Maps>
                                                   Button(
                                                       color:
                                                       theme,
-                                                      onTap:
-                                                          () async {
-                                                        addressList
-                                                            .clear();
-                                                        var val = await geoCoding(
-                                                            center.latitude,
-                                                            center.longitude);
-                                                        setState(
-                                                                () {
-                                                              if (addressList.where((element) => element.id == 'pickup').isNotEmpty) {
-                                                                var add = addressList.firstWhere((element) => element.id == 'pickup');
-                                                                add.address = val;
-                                                                add.latlng = LatLng(center.latitude, center.longitude);
-                                                              } else {
-                                                                addressList.add(AddressList(id: 'pickup', address: val, latlng: LatLng(center.latitude, center.longitude)));
-                                                              }
-                                                            });
-                                                        if (addressList
-                                                            .isNotEmpty) {
-                                                          // ignore: use_build_context_synchronously
-                                                          Navigator.push(context,
-                                                              MaterialPageRoute(builder: (context) => const DropLocation()));
+                                                      onTap: () async {
+                                                        debugPrint('=== INSTANT TAXI CLICKED ===');
+                                                        debugPrint('center: $center');
+                                                        debugPrint('addressList before clear: ${addressList.length}');
+
+                                                        addressList.clear();
+
+                                                        setState(() {
+                                                          _isLoading = true;
+                                                        });
+
+                                                        debugPrint('Calling geoCoding...');
+                                                        var val = await geoCoding(center.latitude, center.longitude);
+                                                        debugPrint('geoCoding result: $val');
+
+                                                        if (val == null || val.toString().isEmpty || val == 'no internet') {
+                                                          debugPrint('geoCoding failed - val is: $val');
+                                                          setState(() {
+                                                            _isLoading = false;
+                                                          });
+                                                          return;
+                                                        }
+                                                        setState(() {
+                                                          addressList.add(AddressList(
+                                                              id: 'pickup',
+                                                              address: val,
+                                                              latlng: LatLng(center.latitude, center.longitude)));
+                                                          _isLoading = false;
+                                                        });
+
+                                                        debugPrint('addressList length: ${addressList.length}');
+
+                                                        if (addressList.isNotEmpty) {
+                                                          debugPrint('Navigating to DropLocation...');
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) => const DropLocation()));
                                                         }
                                                       },
                                                       text: languages[choosenLanguage]
