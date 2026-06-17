@@ -45,6 +45,7 @@ class _OtpState extends State<Otp> with TickerProviderStateMixin {
         AnimationController(vsync: this, duration: const Duration(seconds: 60));
     aController.reverse(
         from: aController.value == 0.0 ? 60.0 : aController.value);
+    isfromomobile = true;
     otpFalse();
     SharedPreferences.getInstance().then((value) {
       value.setString(currentRegScreen, isOTPScreen);
@@ -67,7 +68,7 @@ class _OtpState extends State<Otp> with TickerProviderStateMixin {
             context,
             MaterialPageRoute(
                 builder: (context) => const RequiredInformation()),
-            (route) => false);
+                (route) => false);
       } else if (userDetails['uploaded_document'] == true &&
           userDetails['approve'] == false) {
         Navigator.pushAndRemoveUntil(
@@ -75,13 +76,13 @@ class _OtpState extends State<Otp> with TickerProviderStateMixin {
             MaterialPageRoute(
               builder: (context) => const RequiredInformation(),
             ),
-            (route) => false);
+                (route) => false);
       } else if (userDetails['uploaded_document'] == true &&
           userDetails['approve'] == true) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const Maps()),
-            (route) => false);
+                (route) => false);
       }
     } else if (verify == false) {
       if (isverifyemail == true) {
@@ -215,7 +216,7 @@ class _OtpState extends State<Otp> with TickerProviderStateMixin {
                                   child: MyText(
                                     // ignore: prefer_interpolation_to_compose_strings
                                     text: languages[choosenLanguage]
-                                        ['text_otp_code'],
+                                    ['text_otp_code'],
                                     size: media.width * twenty,
                                     fontweight: FontWeight.bold,
                                   ),
@@ -225,29 +226,30 @@ class _OtpState extends State<Otp> with TickerProviderStateMixin {
                                 ),
                                 (isfromomobile == true)
                                     ? MyText(
-                                        // ignore: prefer_interpolation_to_compose_strings
-                                        text:
-                                            '''${languages[choosenLanguage]['text_enter_otp_at']}
+                                  // ignore: prefer_interpolation_to_compose_strings
+                                  text:
+                                  '''${languages[choosenLanguage]['text_enter_otp_at']}
 ${countries[phcode]['dial_code']} $phnumber''',
-                                        size: media.width * fourteen,
-                                        textAlign: TextAlign.center,
-                                        color: textColor.withOpacity(0.5),
-                                      )
+                                  size: media.width * fourteen,
+                                  textAlign: TextAlign.center,
+                                  color: textColor.withOpacity(0.5),
+                                )
                                     : MyText(
-                                        // ignore: prefer_interpolation_to_compose_strings
-                                        text:
-                                            '${languages[choosenLanguage]['text_enter_otp_at']} $email',
-                                        size: media.width * fourteen,
-                                        textAlign: TextAlign.center,
-                                        color: textColor.withOpacity(0.5),
-                                      ),
+                                  // ignore: prefer_interpolation_to_compose_strings
+                                  text:
+                                  '${languages[choosenLanguage]['text_enter_otp_at']} $email',
+                                  size: media.width * fourteen,
+                                  textAlign: TextAlign.center,
+                                  color: textColor.withOpacity(0.5),
+                                ),
                                 SizedBox(
                                   height: Responsive.height(3, context),
                                 ),
                                 Pinput(
                                   length: 6,
+                                  // FIX 2 : utiliser val directement au lieu de _pinPutController2.text
                                   onChanged: (val) {
-                                    otpNumber = _pinPutController2.text;
+                                    otpNumber = val;
                                   },
                                   // onSubmitted: (String val) {},
                                   controller: _pinPutController2,
@@ -299,7 +301,7 @@ ${countries[phcode]['dial_code']} $phnumber''',
                                         valueNotifierLogin.incrementNotifier();
                                         if (isfromomobile == true) {
                                           var verify =
-                                              await verifyUser(phnumber);
+                                          await verifyUser(phnumber);
                                           // if (verify == false) {
                                           setState(() {
                                             _error = '';
@@ -307,7 +309,7 @@ ${countries[phcode]['dial_code']} $phnumber''',
                                             _resend = false;
                                           });
                                           phoneAuth(countries[phcode]
-                                                  ['dial_code'] +
+                                          ['dial_code'] +
                                               phnumber);
                                           aController.reverse(
                                               from: aController.value == 0.0
@@ -338,23 +340,15 @@ ${countries[phcode]['dial_code']} $phnumber''',
                                           setState(() {
                                             loginLoading = false;
                                           });
-                                          // } else {
-                                          //   setState(() {
-                                          //     _pinPutController2.text = '';
-                                          //     _error = languages[
-                                          //             choosenLanguage]
-                                          //         ['text_email_already_taken'];
-                                          //   });
-                                          // }
+
                                         }
-                                        // var register = await registerUser();
                                       }
                                       loginLoading = false;
                                       valueNotifierLogin.incrementNotifier();
                                     },
                                     child: MyText(
                                       text: languages[choosenLanguage]
-                                          ['text_resend_otp'],
+                                      ['text_resend_otp'],
                                       size: media.width * thirteen,
                                       fontweight: FontWeight.w500,
                                       color: (_resend == false)
@@ -389,92 +383,83 @@ ${countries[phcode]['dial_code']} $phnumber''',
                 ),
               (isfromomobile == true)
                   ? Container(
-                      alignment: Alignment.center,
-                      child: Button(
-                        onTap: () async {
-                          if (_pinPutController2.length == 6) {
-                            setState(() {
-                              loginLoading = true;
-                              _error = '';
-                            });
+                alignment: Alignment.center,
+                child: Button(
+                  onTap: () async {
+                    if (_pinPutController2.text.length == 6) {
+                      setState(() {
+                        loginLoading = true;
+                        _error = '';
+                      });
 
-                            valueNotifierLogin.incrementNotifier();
-                            //firebase code send false
-                            if (phoneAuthCheck == false) {
-                              var verify = await verifyUser(phnumber);
-                              value = 0;
-                              navigate(verify);
-                            } else {
-                              // firebase code send true
-                              try {
-                                PhoneAuthCredential credential =
-                                    PhoneAuthProvider.credential(
-                                        verificationId: verId,
-                                        smsCode: otpNumber);
+                      valueNotifierLogin.incrementNotifier();
+                      if (phoneAuthCheck == false) {
+                        value = 0;
+                        var verify = await verifyUser(phnumber);
+                        navigate(verify);
+                      } else {
+                        try {
+                          PhoneAuthCredential credential =
+                          PhoneAuthProvider.credential(
+                              verificationId: verId,
+                              smsCode: otpNumber);
 
-                                // Sign the user in (or link) with the credential
-                                await FirebaseAuth.instance
-                                    .signInWithCredential(credential);
+                          await FirebaseAuth.instance
+                              .signInWithCredential(credential);
 
-                                var verify = await verifyUser(phnumber);
-                                navigate(verify);
+                          value = 0;
+                          var verify = await verifyUser(phnumber);
+                          navigate(verify);
 
-                                value = 0;
-                              } on FirebaseAuthException catch (error) {
-                                if (error.code == 'invalid-verification-code') {
-                                  setState(() {
-                                    loginLoading = false;
-                                    _pinPutController2.clear();
-                                    otpNumber = '';
-                                    _error = languages[choosenLanguage]
-                                        ['text_otp_error'];
-                                  });
-                                }
-                              }
-                            }
-
+                        } on FirebaseAuthException catch (error) {
+                          setState(() {
                             loginLoading = false;
-                            valueNotifierLogin.incrementNotifier();
-                          }
-                        },
-                        text: languages[choosenLanguage]['text_verify'],
-                      ),
-                    )
+                            _pinPutController2.clear();
+                            otpNumber = '';
+                            _error = error.message ?? languages[choosenLanguage]['text_otp_error'];
+                          });
+                        }
+                      }
+
+                      loginLoading = false;
+                      valueNotifierLogin.incrementNotifier();
+                    }
+                  },
+                  text: languages[choosenLanguage]['text_verify'],
+                ),
+              )
                   : Container(
-                      alignment: Alignment.center,
-                      child: Button(
-                          onTap: () async {
-                            if (_pinPutController2.length == 6) {
-                              setState(() {
-                                _error = '';
-                              });
-                              loginLoading = true;
+                alignment: Alignment.center,
+                child: Button(
+                    onTap: () async {
+                      if (_pinPutController2.text.length == 6) {
+                        setState(() {
+                          _error = '';
+                        });
+                        loginLoading = true;
 
-                              valueNotifierLogin.incrementNotifier();
-                              var result = await emailVerify(email, otpNumber);
+                        valueNotifierLogin.incrementNotifier();
+                        var result = await emailVerify(email, otpNumber);
 
-                              if (result == 'success') {
-                                isfromomobile = false;
-                                _error = '';
-
-                                value = 1;
-                                var verify = await verifyUser(email);
-                                navigate(verify);
-
-                              } else {
-                                setState(() {
-                                  _pinPutController2.clear();
-                                  otpNumber = '';
-                                  _error = languages[choosenLanguage]
-                                      ['text_otp_error'];
-                                });
-                              }
-                            }
-                            loginLoading = false;
-                            valueNotifierLogin.incrementNotifier();
-                          },
-                          text: languages[choosenLanguage]['text_verify']),
-                    ),
+                        if (result == 'success') {
+                          isfromomobile = false;
+                          _error = '';
+                          value = 1;
+                          var verify = await verifyUser(email);
+                          navigate(verify);
+                        } else {
+                          setState(() {
+                            _pinPutController2.clear();
+                            otpNumber = '';
+                            _error = languages[choosenLanguage]['text_otp_error'];
+                          });
+                        }
+                      }
+                      loginLoading = false;
+                      valueNotifierLogin.incrementNotifier();
+                    },
+                    text: languages[choosenLanguage]['text_verify']),
+              ),
               ButtonBottomSpace(
                 height: 5,
               )
@@ -483,43 +468,43 @@ ${countries[phcode]['dial_code']} $phnumber''',
           //no internet
           (internet == false)
               ? Positioned(
-                  top: 0,
-                  child: NoInternet(
-                    onTap: () {
-                      setState(() {
-                        internetTrue();
-                      });
-                    },
-                  ))
+              top: 0,
+              child: NoInternet(
+                onTap: () {
+                  setState(() {
+                    internetTrue();
+                  });
+                },
+              ))
               : Container(),
 
           //display toast
           (showtoast == true)
               ? Positioned(
-                  bottom: media.width * 0.1,
-                  left: media.width * 0.06,
-                  right: media.width * 0.06,
-                  child: Container(
-                    padding: EdgeInsets.all(media.width * 0.04),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 2.0,
-                              spreadRadius: 2.0,
-                              color: Colors.black.withOpacity(0.2))
-                        ],
-                        color: verifyDeclined),
-                    child: Text(
-                      _error,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.inter(
-                          fontSize: media.width * fourteen,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.red),
-                    ),
-                  ))
+              bottom: media.width * 0.1,
+              left: media.width * 0.06,
+              right: media.width * 0.06,
+              child: Container(
+                padding: EdgeInsets.all(media.width * 0.04),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 2.0,
+                          spreadRadius: 2.0,
+                          color: Colors.black.withOpacity(0.2))
+                    ],
+                    color: verifyDeclined),
+                child: Text(
+                  _error,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                      fontSize: media.width * fourteen,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.red),
+                ),
+              ))
               : Container()
         ],
       ),

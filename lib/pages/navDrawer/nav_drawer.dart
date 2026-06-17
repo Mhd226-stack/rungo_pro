@@ -21,6 +21,8 @@ import '../NavigatorPages/walletpage.dart';
 import '../login/landingpage.dart';
 import '../onTripPage/map_page.dart';
 import '../login/login.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../subscriptionPage/subscription_screen.dart';
 
 class NavDrawer extends StatefulWidget {
   const NavDrawer({Key? key}) : super(key: key);
@@ -982,9 +984,79 @@ class _NavDrawerState extends State<NavDrawer> {
                                               }
                                             },
                                             text: languages[choosenLanguage]['text_sign_out']),
-                                        SizedBox(
-                                          height: media.width * 0.2,
-                                        )
+                                        SizedBox(height: media.width * 0.04),
+                                        Button(
+                                            width: Responsive.width(60, context),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => const SubscriptionScreen()),
+                                              );
+                                            },
+                                            text: 'Mon abonnement'),
+                                        SizedBox(height: media.width * 0.04),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: Responsive.width(4, context),
+                                            vertical: Responsive.height(1.5, context),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            children: [
+                                              // Facebook
+                                              InkWell(
+                                                onTap: () async {
+                                                  const url = 'https://www.facebook.com/share/1BV6eUru7i/';
+                                                  if (await canLaunch(url)) await launch(url);
+                                                },
+                                                child: Image.asset(
+                                                  'assets/images/facebook.png',
+                                                  width: media.width * 0.07,
+                                                  height: media.width * 0.07,
+                                                ),
+                                              ),
+                                              // TikTok
+                                              InkWell(
+                                                onTap: () async {
+                                                  const url = 'https://www.tiktok.com/@rungobf?_r=1&_t=ZN-979VIqyVZLi';
+                                                  if (await canLaunch(url)) await launch(url);
+                                                },
+                                                child: Image.asset(
+                                                  'assets/images/tiktok.png',
+                                                  width: media.width * 0.07,
+                                                  height: media.width * 0.07,
+                                                ),
+                                              ),
+                                              // Instagram
+                                              InkWell(
+                                                onTap: () async {
+                                                  const url = 'https://www.instagram.com/run.go226?igsh=Nm5yZGI0YnJoMjJn';
+                                                  if (await canLaunch(url)) await launch(url);
+                                                },
+                                                child: Image.asset(
+                                                  'assets/images/instagram.png',
+                                                  width: media.width * 0.07,
+                                                  height: media.width * 0.07,
+                                                ),
+                                              ),
+                                              // YouTube
+                                              InkWell(
+                                                onTap: () async {
+                                                  const url = 'https://www.youtube.com/@RungoBurkina';
+                                                  if (await canLaunch(url)) await launch(url);
+                                                },
+                                                child: Image.asset(
+                                                  'assets/images/youtube.png',
+                                                  width: media.width * 0.07,
+                                                  height: media.width * 0.07,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(height: media.width * 0.1),
                                         //logout
                                       ],
                                     ),

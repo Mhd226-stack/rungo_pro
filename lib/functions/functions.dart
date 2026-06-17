@@ -1183,8 +1183,6 @@ otpCall() async {
   return result;
 }
 
-// verify user already exist
-
 verifyUser(String number) async {
   dynamic val;
   try {
@@ -1197,7 +1195,6 @@ verifyUser(String number) async {
           "role": ischeckownerordriver
         }
             : {"email": email, "role": ischeckownerordriver});
-
     if (response.statusCode == 200) {
       val = jsonDecode(response.body)['success'];
       if (val == true) {
@@ -4621,10 +4618,12 @@ enableMyRouteBookings(lat, lng) async {
 dynamic isAvailable;
 
 sendOTPtoEmail(String email) async {
+  debugPrint('=== sendOTPtoEmail === email=$email');
   dynamic result;
   try {
     var response = await http
         .post(Uri.parse('${url}api/v1/send-mail-otp'), body: {'email': email});
+    debugPrint('=== sendOTPtoEmail response === ${response.body}');
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['success'] == true) {
         result = 'success';
@@ -4808,8 +4807,8 @@ drawPolylineBetweenPoints(LatLng source, LatLng destination) async {
 Future<Map<dynamic, dynamic>> fetchDestinationLocation() async {
   var requestRef = FirebaseDatabase.instance.ref('requests/${driverReq['id']}');
   var snapshot = await requestRef.get();
-  var value = snapshot.value as Map<dynamic, dynamic>;
-  return value;
+  var snapshotValue = snapshot.value as Map<dynamic, dynamic>;
+  return snapshotValue;
 }
 
 //
@@ -5052,6 +5051,7 @@ getSubscriptionStatus() async {
       },
     );
     if (response.statusCode == 200) {
+      debugPrint('=== subscription === ${response.body}');
       driverSubscription = jsonDecode(response.body)['data'];
       result = 'success';
     } else if (response.statusCode == 401) {

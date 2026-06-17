@@ -38,6 +38,8 @@ import '../noInternet/nointernet.dart';
 import '../vehicleInformations/docs_onprocess.dart';
 import 'droplocation.dart';
 import 'invoice.dart';
+import '../subscriptionPage/subscription_screen.dart';
+import '../../services/subscription_service.dart';
 
 class Maps extends StatefulWidget {
   const Maps({Key? key}) : super(key: key);
@@ -1437,36 +1439,6 @@ class _MapsState extends State<Maps>
                                         ? MainAxisAlignment.center
                                         : MainAxisAlignment.start,
                                     children: [
-                                      // Bannière abonnement - TODO: à activer
-                                      // if (driverSubscription.isNotEmpty)
-                                      //   Container(
-                                      //     width: media.width * 1,
-                                      //     padding: EdgeInsets.symmetric(
-                                      //         horizontal: media.width * 0.04,
-                                      //         vertical: media.width * 0.02),
-                                      //     color: (driverSubscription['active'] == true)
-                                      //         ? ((driverSubscription['days_remaining'] <= 3)
-                                      //         ? Colors.orange
-                                      //         : Colors.green)
-                                      //         : Colors.red,
-                                      //     child: Row(
-                                      //       children: [
-                                      //         Icon(Icons.card_membership, color: Colors.white, size: 16),
-                                      //         SizedBox(width: 8),
-                                      //         Expanded(
-                                      //           child: Text(
-                                      //             driverSubscription['message'] ?? '',
-                                      //             style: TextStyle(color: Colors.white, fontSize: 12),
-                                      //           ),
-                                      //         ),
-                                      //         if (driverSubscription['active'] == true)
-                                      //           Text(
-                                      //             'Exp: ${driverSubscription['expired_at']?.toString().substring(0, 10) ?? ''}',
-                                      //             style: TextStyle(color: Colors.white, fontSize: 11),
-                                      //           ),
-                                      //       ],
-                                      //     ),
-                                      //   ),
                                       (state == '1')
                                           ? Container(
                                         padding: EdgeInsets.all(
@@ -2073,9 +2045,25 @@ class _MapsState extends State<Maps>
                                                               : Color(0xff929292),
                                                           value:
                                                           userDetails['active'],
-                                                          onChange:
-                                                              (bool? value) async {
+                                                          onChange: (bool? value) async {
                                                             if (((userDetails['vehicle_type_id'] != null) || (userDetails['vehicle_types'] != [])) && driverReq.isEmpty && userDetails['role'] == 'driver') {
+
+                                                              // Vérifier l'abonnement avant de passer online
+                                                              if (value == true) {
+                                                                final subStatus = await SubscriptionService.getStatus();
+                                                                if (!subStatus.isActive) {
+                                                                  if (mounted) {
+                                                                    Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder: (context) => const SubscriptionScreen(),
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                  return;
+                                                                }
+                                                              }
+
                                                               if (locationAllowed == true && serviceEnabled == true) {
                                                                 setState(() {
                                                                   // _isLoading = true;
@@ -3085,35 +3073,14 @@ class _MapsState extends State<Maps>
                                                               )
                                                             ],
                                                           ))
-                                                      // ;
-                                                      // }),
                                                     ],
                                                   )
-                                                      : (driverReq['accepted_at'] !=
-                                                      null)
-                                                      ? Builder(builder:
-                                                      (context) {
-                                                    SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
-                                                      await Future.delayed(Duration(milliseconds: 500));
-                                                      setState(() {
-                                                        polyline.clear();
-                                                      });
-                                                    });
-                                                    return SizedBox(
-                                                      width: media.width * 0.9,
-                                                      height: media.width * 0.7,
-                                                    );
-                                                  })
-                                                      : Builder(builder:
-                                                      (context) {
-                                                    SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
-                                                      await Future.delayed(Duration(milliseconds: 500));
-                                                      setState(() {
-                                                        polyline.clear();
-                                                      });
-                                                    });
-                                                    return SizedBox(width: media.width * 0.9);
-                                                  })
+                                                      : (driverReq['accepted_at'] != null)
+                                                      ? SizedBox(
+                                                    width: media.width * 0.9,
+                                                    height: media.width * 0.7,
+                                                  )
+                                                      : SizedBox(width: media.width * 0.9)
                                                       : Builder(
                                                       builder:
                                                           (context) {

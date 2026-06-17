@@ -605,32 +605,21 @@ class _NamePageState extends State<NamePage> {
                                           name = firstname.text;
                                         }
                                         email = emailtext.text;
-                                        var result =
-                                            await validateEmail(emailtext.text);
-                                        if (result == 'success') {
-                                          isfromomobile = false;
-                                          isverifyemail = true;
-                                          phoneAuthCheck = true;
-                                          await sendOTPtoEmail(email);
-                                          currentPage = 3;
+                                        if (lastname.text != '') {
+                                          name = '${firstname.text} ${lastname.text}';
                                         } else {
-                                          setState(() {
-                                            _error = result.toString();
-                                          });
-                                          // showToast();
+                                          name = firstname.text;
                                         }
+                                        email = emailtext.text;
+                                        currentPage = 3;
+                                        valueNotifierLogin.incrementNotifier();
                                       } else {
-                                        // showToast();
                                         setState(() {
                                           _error = languages[choosenLanguage]
                                               ['text_email_validation'];
                                           loginLoading = false;
                                         });
-                                        // showToast();
                                       }
-                                      // setState(() {
-                                      //   loginLoading = false;
-                                      // });
                                       loginLoading = false;
                                       valueNotifierLogin.incrementNotifier();
                                     } else {
