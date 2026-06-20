@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
@@ -36,6 +36,7 @@ import '../pages/onTripPage/review_page.dart';
 import '../styles/styles.dart';
 import 'geohash.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 //languages code
 dynamic phcode;
@@ -53,7 +54,7 @@ String ischeckownerordriver = '';
 
 //base url
 // String url = 'http://192.168.11.105:8081/';
-String url = 'https://rungobf.com/';
+String url = 'https://rungobf.com/taxi/public/';
 //add '/' at the end of the url as 'https://url.com/'
 
 String mapkey = 'AIzaSyBWlSP098N9_jnbpaQ9aKJHApMxfG7q3no';
@@ -367,6 +368,9 @@ phoneAuth(String phone) async {
     // await auth.setSettings(
     //   appVerificationDisabledForTesting: true,
     // );
+    await FirebaseAuth.instance.setSettings(
+      forceRecaptchaFlow: true,
+    );
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phone,
       verificationCompleted: (PhoneAuthCredential credential) async {
@@ -1196,6 +1200,7 @@ verifyUser(String number) async {
         }
             : {"email": email, "role": ischeckownerordriver});
     if (response.statusCode == 200) {
+      debugPrint('verifyUser API response: ${response.body}');
       val = jsonDecode(response.body)['success'];
       if (val == true) {
         var check = await driverLogin();
@@ -1666,7 +1671,44 @@ currentPositionUpdate() async {
     }
   });
 }
+signInWithGoogle() async {
+  dynamic result;
+  try {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn(serverClientId: '698998642807-ouhn7cjdd2tnush2k9jf1dvee7623ade.apps.googleusercontent.com').signIn();
+    if (googleUser == null) {
+      result = 'cancelled';
+      return result;
+    }
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    isfromomobile = false;
 
+    email = googleUser.email;
+    name = googleUser.displayName ?? '';
+
+    value = 1;
+    email = googleUser.email;
+    var loginResult = await driverLogin();
+    debugPrint('driverLogin result: $loginResult');
+    if (loginResult == true) {
+      var uCheck = await getUserDetails();
+      result = uCheck;
+    } else {
+      // Compte introuvable ? nouvel utilisateur
+      isfromomobile = false;
+      isLoginemail = false;
+      result = false;
+    }
+  } catch (e) {
+    result = e.toString();
+    debugPrint('Google Sign In error: $e');
+  }
+  return result;
+}
 //add request details in firebase realtime database
 
 List latlngArray = [];

@@ -1542,10 +1542,8 @@ class _MapsState extends State<Maps>
                                                             context),
                                                       ),
                                                       Text(
-                                                        languages[
-                                                        choosenLanguage]
-                                                        [
-                                                        'text_trustedtaxi'],
+                                                        languages[choosenLanguage]['text_trustedtaxi'],
+                                                        textAlign: TextAlign.center,
                                                         style: GoogleFonts.inter(
                                                             fontSize:
                                                             media.width *
@@ -2049,20 +2047,20 @@ class _MapsState extends State<Maps>
                                                             if (((userDetails['vehicle_type_id'] != null) || (userDetails['vehicle_types'] != [])) && driverReq.isEmpty && userDetails['role'] == 'driver') {
 
                                                               // Vérifier l'abonnement avant de passer online
-                                                              if (value == true) {
-                                                                final subStatus = await SubscriptionService.getStatus();
-                                                                if (!subStatus.isActive) {
-                                                                  if (mounted) {
-                                                                    Navigator.push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        builder: (context) => const SubscriptionScreen(),
-                                                                      ),
-                                                                    );
-                                                                  }
-                                                                  return;
-                                                                }
-                                                              }
+                                                              //if (value == true) {
+                                                              //final subStatus = await SubscriptionService.getStatus();
+                                                              //if (!subStatus.isActive) {
+                                                              //if (mounted) {
+                                                              // Navigator.push(
+                                                              // context,
+                                                              //  MaterialPageRoute(
+                                                              //     builder: (context) => const SubscriptionScreen(),
+                                                              //    ),
+                                                              //  );
+                                                              // }
+                                                              // return;
+                                                              //  }
+                                                              //}
 
                                                               if (locationAllowed == true && serviceEnabled == true) {
                                                                 setState(() {

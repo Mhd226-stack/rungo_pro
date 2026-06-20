@@ -1,14 +1,14 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SubscriptionService {
   // Base URL de ton API Laravel
-  static const String _baseUrl = 'https://rungobf.com/api/v1';
+  static const String _baseUrl = 'https://rungobf.com/taxi/public/api/v1';
 
   /*
   |--------------------------------------------------------------------------
-  | Récupérer le token du driver connecté
+  | RÃ©cupÃ©rer le token du driver connectÃ©
   |--------------------------------------------------------------------------
   */
   static Future<String?> _getToken() async {
@@ -33,7 +33,7 @@ class SubscriptionService {
   /*
   |--------------------------------------------------------------------------
   | 1. GET /api/v1/driver/subscription/status
-  | Retourne le statut de l'abonnement du driver connecté
+  | Retourne le statut de l'abonnement du driver connectÃ©
   |--------------------------------------------------------------------------
   */
   static Future<SubscriptionStatusResult> getStatus() async {
@@ -71,7 +71,7 @@ class SubscriptionService {
         hasSubscription: false,
         isActive: false,
         subscriptionStatus: 'none',
-        error: 'Erreur réseau : $e',
+        error: 'Erreur rÃ©seau : $e',
       );
     }
   }
@@ -79,7 +79,7 @@ class SubscriptionService {
   /*
   |--------------------------------------------------------------------------
   | 2. POST /api/v1/payment/cinetpay/subscribe
-  | Initier un paiement d'abonnement — retourne le payment_url CinetPay
+  | Initier un paiement d'abonnement â€” retourne le payment_url CinetPay
   |--------------------------------------------------------------------------
   */
   static Future<InitSubscriptionResult> initSubscription(String plan) async {
@@ -105,12 +105,12 @@ class SubscriptionService {
 
       return InitSubscriptionResult(
         success: false,
-        error: data['message'] ?? 'Échec de l\'initialisation du paiement.',
+        error: data['message'] ?? 'Ã‰chec de l\'initialisation du paiement.',
       );
     } catch (e) {
       return InitSubscriptionResult(
         success: false,
-        error: 'Erreur réseau : $e',
+        error: 'Erreur rÃ©seau : $e',
       );
     }
   }
@@ -118,7 +118,7 @@ class SubscriptionService {
 
 /*
 |--------------------------------------------------------------------------
-| Modèles de résultat
+| ModÃ¨les de rÃ©sultat
 |--------------------------------------------------------------------------
 */
 

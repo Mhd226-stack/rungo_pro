@@ -12,8 +12,8 @@ import '../../translation/translation.dart';
 import '../../widgets/widgets.dart';
 import '../onTripPage/map_page.dart';
 
-const _appId = '06b417f44ed0470e9249534d3a603920';
-const _appCertificate = '67b6ab170b4b4d7cb78e48f94991f81d';
+const _appId = 'b754fd98261148358bb0910f77c79616';
+const _appCertificate = '';
 
 class IncommingCallScreen extends StatefulWidget {
   const IncommingCallScreen();

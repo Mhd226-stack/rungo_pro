@@ -967,35 +967,18 @@ class _NavDrawerState extends State<NavDrawer> {
                                             ),
                                           ),
                                         ),
-
-                                        SizedBox(
-                                          height: media.width * 0.08,
-                                        ),
-                                        Button(
-                                            width: Responsive.width(60, context),
-                                            onTap: () async {
-                                              var result = await userLogout();
-                                              if (result == 'success') {
-                                                Navigator.pushAndRemoveUntil(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => const Login()),
-                                                      (route) => false,
-                                                );
-                                              }
-                                            },
-                                            text: languages[choosenLanguage]['text_sign_out']),
-                                        SizedBox(height: media.width * 0.04),
-                                        Button(
-                                            width: Responsive.width(60, context),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => const SubscriptionScreen()),
-                                              );
-                                            },
-                                            text: 'Mon abonnement'),
+                                        //SizedBox(height: media.width * 0.04),
+                                      //Button(
+                                      // width: Responsive.width(60, context),
+                                    //onTap: () {
+                                      // Navigator.pop(context);
+                                    // Navigator.push(
+                                    //   context,
+                                      //MaterialPageRoute(
+                                    //   builder: (context) => const SubscriptionScreen()),
+                                      //  );
+                                      //   },
+                                        //  text: 'Mon abonnement'),
                                         SizedBox(height: media.width * 0.04),
                                         Padding(
                                           padding: EdgeInsets.symmetric(
@@ -1056,6 +1039,22 @@ class _NavDrawerState extends State<NavDrawer> {
                                             ],
                                           ),
                                         ),
+                                        SizedBox(
+                                          height: media.width * 0.08,
+                                        ),
+                                        Button(
+                                            width: Responsive.width(60, context),
+                                            onTap: () async {
+                                              var result = await userLogout();
+                                              if (result == 'success') {
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => const Login()),
+                                                      (route) => false,
+                                                );
+                                              }
+                                            },
+                                            text: languages[choosenLanguage]['text_sign_out']),
                                         SizedBox(height: media.width * 0.1),
                                         //logout
                                       ],

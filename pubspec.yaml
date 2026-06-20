@@ -2,7 +2,7 @@ name: flutter_driver
 description: A new Flutter project.
 publish_to: "none"
 
-version: 1.1.17+20260614
+version: 1.1.17+20260621
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -48,6 +48,7 @@ dependencies:
   firebase_app_check: 0.4.3
   switcher_button: ^0.0.4
   flutter_advanced_switch: ^3.1.0
+  google_sign_in: ^6.2.1
 
 dev_dependencies:
   flutter_test:

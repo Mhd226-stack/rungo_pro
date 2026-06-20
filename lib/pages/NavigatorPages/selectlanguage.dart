@@ -13,7 +13,7 @@ class SelectLanguage extends StatefulWidget {
 }
 
 class _SelectLanguageState extends State<SelectLanguage> {
-  var _choosenLanguage = choosenLanguage;
+  var _choosenLanguage = choosenLanguage.isEmpty ? 'fr' : choosenLanguage;
 
   //navigate pop
   pop() {
@@ -88,56 +88,51 @@ class _SelectLanguageState extends State<SelectLanguage> {
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
                       child: Column(
-                        children: languages
-                            .map((i, value) {
-                              return MapEntry(
-                                  i,
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _choosenLanguage = i;
-                                      });
-                                    },
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.all(media.width * 0.025),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          MyText(
-                                            text: languagesCode
-                                                .firstWhere((e) =>
-                                                    e['code'] == i)['name']
-                                                .toString(),
-                                            size: media.width * sixteen,
-                                          ),
-                                          Container(
-                                            height: media.width * 0.05,
-                                            width: media.width * 0.05,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                    color: buttonColor,
-                                                    width: 1.2)),
-                                            alignment: Alignment.center,
-                                            child: (_choosenLanguage == i)
-                                                ? Container(
-                                                    height: media.width * 0.03,
-                                                    width: media.width * 0.03,
-                                                    decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color: buttonColor),
-                                                  )
-                                                : Container(),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ));
-                            })
-                            .values
-                            .toList(),
+                        children: [
+                          'fr',
+                          ...languages.keys.where((k) => k != 'fr').toList(),
+                        ].map((i) {
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                _choosenLanguage = i;
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(media.width * 0.025),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  MyText(
+                                    text: languagesCode
+                                        .firstWhere((e) => e['code'] == i)['name']
+                                        .toString(),
+                                    size: media.width * sixteen,
+                                  ),
+                                  Container(
+                                    height: media.width * 0.05,
+                                    width: media.width * 0.05,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: buttonColor,
+                                            width: 1.2)),
+                                    alignment: Alignment.center,
+                                    child: (_choosenLanguage == i)
+                                        ? Container(
+                                      height: media.width * 0.03,
+                                      width: media.width * 0.03,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: buttonColor),
+                                    )
+                                        : Container(),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),

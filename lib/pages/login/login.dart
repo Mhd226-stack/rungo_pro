@@ -13,6 +13,8 @@ import '../noInternet/nointernet.dart';
 import 'agreement.dart';
 import 'namepage.dart';
 import 'otp_page.dart';
+import '../onTripPage/map_page.dart';
+import 'requiredinformation.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -148,17 +150,19 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                               Center(
                                 child: Image(
                                     image: AssetImage(
-                                        'assets/images/login_screen_3d.png'),
+                                        'assets/images/no_ride.png'),
                                     width: media.width * 0.6),
                               ),
                               SizedBox(height: 15),
-                              MyText(
-                                text: languages[choosenLanguage]
-                                ['text_what_mobilenum'],
-                                size: media.width * twentytwo,
-                                fontweight: FontWeight.bold,
+                              Center(
+                                child: MyText(
+                                  text: languages[choosenLanguage]['text_what_mobilenum'],
+                                  size: media.width * twentytwo,
+                                  fontweight: FontWeight.bold,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
-                              SizedBox(height: media.height * 0.07),
+                              SizedBox(height: media.height * 0.03),
                               Container(
                                 padding: const EdgeInsets.fromLTRB(
                                     10, 0, 10, 0),
@@ -374,9 +378,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                     const SizedBox(width: 10),
                                     Expanded(
                                       child: Container(
-                                        alignment: Alignment.bottomCenter,
-                                        height: 50,
-                                        child: TextFormField(
+                                        alignment: Alignment.centerLeft,
+                                    height: 50,
+                                    child: TextFormField(
                                           textAlign: TextAlign.start,
                                           controller: controller,
                                           onChanged: (val) {
@@ -408,19 +412,11 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                           TextInputType.phone,
                                           decoration: InputDecoration(
                                             counterText: '',
-                                            prefixIcon: Padding(
-                                              padding:
-                                              const EdgeInsets.only(
-                                                  top: 12),
-                                              child: MyText(
-                                                text: countries[phcode]
-                                                ['dial_code']
-                                                    .toString(),
-                                                size: media.width * sixteen,
-                                                textAlign:
-                                                TextAlign.center,
-                                              ),
-                                            ),
+                                            prefix: MyText(
+                                                  text: countries[phcode]['dial_code'].toString(),
+                                                  size: media.width * sixteen,
+                                                  textAlign: TextAlign.center,
+                                                ),
                                             hintStyle: choosenLanguage ==
                                                 'ar'
                                                 ? GoogleFonts.cairo(
@@ -453,7 +449,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                 fontweight: FontWeight.w300,
                                 color: textColor.withOpacity(0.5),
                               ),
-                              SizedBox(height: media.height * 0.055),
+                              SizedBox(height: media.height * 0.02),
                               Container(
                                 width: Responsive.width(100, context),
                                 height: 2,
@@ -530,6 +526,82 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                     SizedBox(height: media.width * 0.025)
                                   ],
                                 ),
+                              SizedBox(height: Responsive.height(2, context)),
+// Séparateur
+                              Row(
+                                children: [
+                                  Expanded(child: Container(height: 1, color: darkModeBorderColor)),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: MyText(
+                                      text: 'OU',
+                                      size: media.width * twelve,
+                                      color: textColor.withOpacity(0.5),
+                                    ),
+                                  ),
+                                  Expanded(child: Container(height: 1, color: darkModeBorderColor)),
+                                ],
+                              ),
+                              SizedBox(height: Responsive.height(2, context)),
+// Bouton Google
+                              InkWell(
+                                onTap: () async {
+                                  setState(() { loginLoading = true; });
+                                  var result = await signInWithGoogle();
+                                  if (result == true) {
+                                    // Utilisateur existant → Maps
+                                    await getUserDetails();
+                                    await getSubscriptionStatus();
+                                    if (userDetails['uploaded_document'] == false ||
+                                        userDetails['approve'] == false) {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const RequiredInformation()),
+                                            (route) => false,
+                                      );
+                                    } else {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const Maps()),
+                                            (route) => false,
+                                      );
+                                    }
+                                  } else if (result == false) {
+                                    // Nouvel utilisateur → NamePage
+                                    currentPage = 2;
+                                  } else if (result != 'cancelled') {
+                                    setState(() {
+                                      _error = result.toString();
+                                    });
+                                  }
+                                  setState(() { loginLoading = false; });
+                                },
+                                child: Container(
+                                  height: 50,
+                                  width: media.width * 0.9,
+                                  decoration: BoxDecoration(
+                                    color: darkModeSecContainer,
+                                    borderRadius: BorderRadius.circular(3000.0),
+                                    border: Border.all(color: darkModeBorderColor),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/google.png',
+                                        width: 24,
+                                        height: 24,
+                                      ),
+                                      SizedBox(width: 10),
+                                      MyText(
+                                        text: 'Continuer avec Google',
+                                        size: media.width * fourteen,
+                                        fontweight: FontWeight.w500,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ],
                           );
                         })

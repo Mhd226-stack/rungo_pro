@@ -8,6 +8,7 @@ import '../../translation/translation.dart';
 import '../../widgets/widgets.dart';
 import '../login/landingpage.dart';
 import '../onTripPage/map_page.dart';
+import '../NavigatorPages/faq.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -78,33 +79,50 @@ class _SettingsState extends State<Settings> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const SelectLanguage()));
+                                      const SelectLanguage()));
                               if (nav) {
                                 setState(() {});
                               }
                             },
                             showIcon: false,
                             text: languages[choosenLanguage]
-                                ['text_change_language'],
+                            ['text_change_language'],
                             image:
-                                'assets/images/menu_item/choose_languages.png',
+                            'assets/images/menu_item/choose_languages.png',
                           ),
                         ),
+
+                        // FAQ
+                        MenuSubCatagoryItem(
+                          child: NavMenu(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const Faq()));
+                            },
+                            showIcon: false,
+                            text: languages[choosenLanguage]['text_faq'],
+                            image: 'assets/images/faq.png',
+                          ),
+                        ),
+
                         // delete account
                         MenuSubCatagoryItem(
                           child: userDetails['owner_id'] == null
                               ? NavMenu(
-                                  onTap: () {
-                                    setState(() {
-                                      deleteAccount = true;
-                                    });
-                                    valueNotifierHome.incrementNotifier();
-                                  },
-                                  showIcon: false,
-                                  text: languages[choosenLanguage]
-                                      ['text_delete_account'],
-                                  image: 'assets/images/menu_item/delete.png',
-                                )
+                            onTap: () {
+                              setState(() {
+                                deleteAccount = true;
+                              });
+                              valueNotifierHome.incrementNotifier();
+                            },
+                            showIcon: false,
+                            text: languages[choosenLanguage]
+                            ['text_delete_account'],
+                            image: 'assets/images/menu_item/delete.png',
+                          )
                               : Container(),
                         ),
                       ],

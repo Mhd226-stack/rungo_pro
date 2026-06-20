@@ -127,18 +127,17 @@ class _MakeComplaintState extends State<MakeComplaint> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     color: darkModeSecContainer),
+                                // APRÈS (fix)
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    MyText(
-                                        text:
-                                            generalComplaintList[complaintType]
-                                                ['title'],
-                                        size: media.width * fourteen),
+                                    Expanded(
+                                      child: MyText(
+                                          text: generalComplaintList[complaintType]['title'],
+                                          size: media.width * fourteen),
+                                    ),
                                     RotatedBox(
-                                      quarterTurns:
-                                          (_showOptions == true) ? 2 : 0,
+                                      quarterTurns: (_showOptions == true) ? 2 : 0,
                                       child: Container(
                                         height: media.width * 0.08,
                                         width: media.width * 0.08,

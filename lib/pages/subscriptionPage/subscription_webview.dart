@@ -24,7 +24,7 @@ class _SubscriptionWebViewState extends State<SubscriptionWebView> {
   bool _paymentDone = false;
 
   // URL de retour CinetPay — doit correspondre à ce qu'on a mis dans le controller Laravel
-  static const String _returnUrlBase = 'https://rungobf.com/api/v1/payment/cinetpay/return';
+  static const String _returnUrlBase = 'https://rungobf.com/taxi/public/api/v1/payment/cinetpay/return';
 
   @override
   void initState() {

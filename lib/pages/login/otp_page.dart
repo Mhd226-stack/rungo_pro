@@ -394,9 +394,10 @@ ${countries[phcode]['dial_code']} $phnumber''',
 
                       valueNotifierLogin.incrementNotifier();
                       if (phoneAuthCheck == false) {
-                        value = 0;
-                        var verify = await verifyUser(phnumber);
-                        navigate(verify);
+                        setState(() {
+                          loginLoading = false;
+                          _error = languages[choosenLanguage]['text_otp_error'];
+                        });
                       } else {
                         try {
                           PhoneAuthCredential credential =

@@ -38,13 +38,17 @@ class _CallScreen extends State<CallScreen> {
         .ref('requests/${driverReq['id']}')
         .onValue
         .listen((event) async {
+      if (!mounted) return; // ← correction 1
+
       Map rideRequest = event.snapshot.value as Map;
       String currentCallingStatus = rideRequest[callingStatus];
       if (currentCallingStatus == callingStatusDeclined) {
         await rtcEngin.leaveChannel();
         await rtcEngin.release();
         isCallActivated = false;
-        await Navigator.pushAndRemoveUntil(context,
+
+        if (!mounted) return; // ← correction 2 (après les await)
+        Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (context) => Maps()), (route) => false);
       }
     });

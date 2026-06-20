@@ -43,7 +43,7 @@ class _NamePageState extends State<NamePage> {
     profilepicturecontroller = StreamController.broadcast();
     _error = '';
 
-    if (isLoginemail == true) {
+    if (isLoginemail == true || value == 1) {
       emailtext.text = email;
     }
     SharedPreferences.getInstance().then((value) {
@@ -93,24 +93,14 @@ class _NamePageState extends State<NamePage> {
                   children: [
                     SizedBox(height: media.height * 0.02),
                     GestureDetector(
-                      onTap: () {
-                        String fetchedPhone =
-                            sharefPref!.getString(phoneForPageRedirect)!;
-                        String fetchedCountryCode =
-                            sharefPref!.getString(countryForPageRedirect)!;
-                        int fetchedpncodeCode =
-                            sharefPref!.getInt(phcodeForRedirect) ?? 1;
-                        print(
-                            '''dial_code_code:${countries[fetchedpncodeCode]['code']}
-                                ''');
-                        print(fetchedCountryCode);
-                        print(fetchedPhone);
-                        print(fetchedpncodeCode);
-                      },
-                      child: MyText(
-                        text: languages[choosenLanguage]['text_your_name'],
-                        size: media.width * twentytwo,
-                        fontweight: FontWeight.w700,
+                      onTap: () {},
+                      child: Center(
+                        child: MyText(
+                          text: languages[choosenLanguage]['text_your_name'],
+                          size: media.width * twentytwo,
+                          fontweight: FontWeight.w700,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -250,7 +240,7 @@ class _NamePageState extends State<NamePage> {
                           focusNode: emailFn,
                           inputAction: TextInputAction.done,
                           textController: emailtext,
-                          readonly: (isfromomobile == false) ? true : false,
+                          readonly: (isfromomobile == false || isLoginemail == true) ? true : false,
                           hinttext: languages[choosenLanguage]
                               ['text_enter_email'],
                           shouldCapatalize: false,
@@ -492,7 +482,7 @@ class _NamePageState extends State<NamePage> {
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Container(
-                                    alignment: Alignment.bottomCenter,
+                                    alignment: Alignment.centerLeft,
                                     height: 50,
                                     child: TextFormField(
                                       textAlign: TextAlign.start,
@@ -522,16 +512,11 @@ class _NamePageState extends State<NamePage> {
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                         counterText: '',
-                                        prefixIcon: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 12),
-                                          child: MyText(
-                                            text: countries[phcode]['dial_code']
-                                                .toString(),
+                                        prefix: MyText(
+                                            text: countries[phcode]['dial_code'].toString(),
                                             size: media.width * sixteen,
                                             textAlign: TextAlign.center,
                                           ),
-                                        ),
                                         hintStyle: choosenLanguage == 'ar'
                                             ? GoogleFonts.cairo(
                                                 color:
@@ -581,9 +566,7 @@ class _NamePageState extends State<NamePage> {
                               Button(
                                   onTap: () async {
                                     if (firstname.text.isNotEmpty &&
-                                        emailtext.text.isNotEmpty &&
-                                        (proImageFile != null &&
-                                            proImageFile.isNotEmpty)) {
+                                        emailtext.text.isNotEmpty) {
                                       setState(() {
                                         // loginLoading = true;
                                         _error = '';
@@ -642,9 +625,7 @@ class _NamePageState extends State<NamePage> {
                               onTap: () async {
                                 if (firstname.text.isNotEmpty &&
                                     controller.text.length >=
-                                        countries[phcode]['dial_min_length'] &&
-                                    (proImageFile != null &&
-                                        proImageFile.isNotEmpty)) {
+                                        countries[phcode]['dial_min_length']) {
                                   if (lastname.text != '') {
                                     name = '${firstname.text} ${lastname.text}';
                                   } else {
@@ -679,11 +660,7 @@ class _NamePageState extends State<NamePage> {
                                 }
                               },
                               color: (firstname.text.isNotEmpty &&
-                                      controller.text.length >=
-                                          countries[phcode]
-                                              ['dial_min_length'] &&
-                                      (proImageFile != null &&
-                                          proImageFile.isNotEmpty))
+                                  emailtext.text.isNotEmpty)
                                   ? buttonColor
                                   : darkModeSecContainer,
                               text: languages[choosenLanguage]['text_next'],
@@ -708,8 +685,9 @@ class _NamePageState extends State<NamePage> {
                       color: Colors.transparent.withOpacity(0.6)),
                   child: MyText(
                     text: languages[choosenLanguage]['text_fill_all_info'],
-                    size: media.width * sixteen,
-                    color: textColor,
+                    size: media.width * twelve,
+                    color: Colors.red,
+                    textAlign: TextAlign.center,
                   ),
                 ))
             : Container(),
