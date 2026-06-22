@@ -71,6 +71,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     isLoginemail = false;
     isfromomobile = true;
     var result = await getCountryCode();
+    if (!mounted) return;
     if (result == 'success') {
       setState(() {
         loginLoading = false;

@@ -2,7 +2,7 @@ name: flutter_driver
 description: A new Flutter project.
 publish_to: "none"
 
-version: 1.1.17+20260621
+version: 1.1.17+20260624
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
