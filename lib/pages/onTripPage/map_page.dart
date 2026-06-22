@@ -157,21 +157,23 @@ class _MapsState extends State<Maps>
         }
       });
     });
-    Timer.periodic((Duration(seconds: 10)), (timer) {
+    _timer = Timer.periodic((Duration(seconds: 10)), (timer) {
       dbRef
           .child('drivers/driver_${userDetails['id']}')
           .get()
           .then((snapshot) async {
+        if (!mounted) {
+          timer.cancel();
+          return;
+        }
         if (snapshot.exists) {
           var snapShotValue = snapshot.value;
           String dbToken = (snapShotValue as Map)['fcm_token'];
           debugPrint('Database token: $dbToken');
           String? currentToken = await FirebaseMessaging.instance.getToken();
           if (currentToken != null && dbToken != currentToken) {
-            // showLogoutNotifier = true;
             await userLogout();
             navigateLogout();
-            // print('''$result Loged out''');
           } else {
             debugPrint('Logged in');
           }
@@ -267,6 +269,7 @@ class _MapsState extends State<Maps>
   }
 
   navigateLogout() {
+    if (!mounted) return;
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LandingPage()));
   }
